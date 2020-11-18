@@ -1,91 +1,79 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Image Metadata Management System</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <style>
+    body {
+			font-family: "Segoe UI", Arial, sans-serif;
+			font-weight: 400;
+			/*background-color: #e3edfc;*/
+		}
 
-    <style>
-    body
-    {
-      font-family: "Segoe UI",Arial,sans-serif;
-      font-weight: 400;
-    }
-    .form
-    {
-      background: rgba(255, 0, 0,0.3);
-      height: 800px;
-      width: 600px;
-      position:relative;
-      left: 30%;
-      box-shadow: 0px 0px 15px 0px #888888;
-    }
-    input[type=submit]
-    {
-      background: #80b3ff;
-      outline: none;
-      width:100px;
-      padding: 5px;
-      border-color:  rgba(255, 0, 0,0.3);
-      font-family: "Segoe UI",Arial,sans-serif;
-      font-size: 20px;
-    }
+		.form {
+			background: rgba(0, 183, 255, 0.082);
+			/*height: 800px;*/
+			width: 500px;
+			position: relative;
+			padding:20px 0px 50px 0px;
+			margin: 10px 0px 10px 0px;
+			left: 30%;
+			box-shadow: 0px 0px 15px 0px #888888;
+			border-radius: 10px;
+			text-align: center;
+		}
+
+		.btn-submit {
+			background: rgba(57, 136, 255, 0.5);
+			outline: none;
+			width: 100px;
+			padding-top: 0px;
+			padding-bottom: 5px;
+			padding-left: 5px;
+			padding-right: 5px;
+			margin-top: 20px;
+			border-color: rgba(0, 0, 255, 0.2);
+			border-radius: 5%;
+			font-family: "Segoe UI", Arial, sans-serif;
+			font-size: 18px;
+			color: #242323;
+		}
+
+		.btn-submit:hover {
+			background: rgba(57, 136, 255, 0.8);
+			cursor:pointer;
+		}
     </style>
+  <title>Image Metadata Management System</title>
 </head>
 
-<body style="text-align: center;">
-    <div class="main">
-      <br><br>
-        <div class="form">
-
-            <body style="text-align: center;">
-                <br>
-                <br>
-                <br>
-                <br>
-                <div class="main">
-                  <h1 style="color:red;"class="login"><b>Login</b></h1>
-
-                  <%= msgTop%>
-                      <br>
-                      <form method="post" action="/item/auth">
-                          <label for="name">User Name:</label>
-                          <input type="text" name="name"><br>
-                          <br>
-
-                          <label for="name">Password:</label> &nbsp&nbsp
-                          <input type="password" name="prop"><br>
-                          <br><br>
-                          <input type="submit" value="Login">
-                      </form>
-                      <br>
-                      <br>
-
-                      <h1 style="color:red;" class="add"><b>New User Registration</b></h1>
-                      <%= msg%>
-                          <br>
-                          <form method="post" action="/item/addUser">
-                              <label for="name">User Name:</label>
-                              <input type="text" name="name"><br>
-                              <br>
-                              <label for="name">Password:</label> &nbsp&nbsp
-                              <input type="password" name="pass"><br>
-                              <br><br>
-                              <input type="submit" value="Sign-Up">
-                          </form>
-                          <br>
-                          <br>
-
-
-                </div>
-
-            </body>
-
-        </div>
-    </div>
+<body>
+  <div class="form">
+			<h1 style="color:rgba(0,0,128,0.8); font-weight: lighter;" class="login"><b>Login</b></h1>
+			<%= msgTop%>
+			<form method="post" action="/item/auth">
+				<label for="name">User Name:</label>
+				<input type="text" name="name"><br>
+				<h4 style="font-weight: lighter; color: #242323; margin: 0px;">*case sensitive</h4>
+				<label for="name">Password:</label> &nbsp&nbsp
+				<input type="password" name="prop"><br><br>
+				<button class="btn-submit" type="submit">Login</button>
+			</form>
+			<br>
+			<br>
+			<h1 style="color:rgba(0,0,128,0.8); font-weight: lighter;" class="add"><b>New User Registration</b></h1>
+			<%= msg%>
+			<form method="post" action="/item/addUser">
+				<label for="name">User Name:</label>
+				<input type="text" name="name" placeholder="Eg: johnathan-wick"><br>
+				<br>
+				<label for="name">Password:</label> &nbsp&nbsp
+				<input type="password" name="pass"><br><br>
+				<button class="btn-submit" type="submit">Sign-Up</button>
+			</form>
+		</div>
 </body>
 
 </html>

@@ -26,7 +26,7 @@ const options = {
 
 const connectWithRetry = () => {
     console.log('MongoDB connection with retry')
-    mongoose.connect("mongodb://mongo:27017/docker-node-mongo", options).then(() => {
+    mongoose.connect("mongodb://mongo:27017/imms-db", options).then(() => {
         console.log('MongoDB is connected')
     }).catch(err => {
         console.log(err)
@@ -53,14 +53,14 @@ app.use(express.static(path.join(__dirname, './public/')));
 app.use(express.urlencoded({ extended: false }));
 //set storage engine
 const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
+    destination: function (req, file, cb) {
         cb(null, path.join(__dirname, './public/uploads'))
     },
-    filename: function(req, file, cb) {
+    filename: function (req, file, cb) {
         var fileName = file.fieldname + '-' + Date.now() + path.extname(file.originalname);
         try {
             //console.log("entered");
-            new ExifImage({ image: path.join('public/uploads/', fileName) }, function(error, exifData) {
+            new ExifImage({ image: path.join('public/uploads/', fileName) }, function (error, exifData) {
                 if (error) {
                     console.log('Error: ' + error.message);
                 } else {
@@ -82,7 +82,7 @@ const storage = multer.diskStorage({
 //init upload
 const upload = multer({
     storage: storage,
-    fileFilter: function(req, file, cb) {
+    fileFilter: function (req, file, cb) {
         checkFileType(file, cb);
     }
 }).single('myImage');
@@ -102,7 +102,7 @@ function checkFileType(file, cb) {
     }
 }
 app.post('/upload', (req, res) => {
-    var async_func = async function(req, res) {
+    var async_func = async function (req, res) {
         upload(req, res, (err) => {
             if (err) {
                 res.render('logged', {
@@ -139,7 +139,7 @@ app.get('/loggedIn', (req, res) => {
         .then(items => res.render('logged', { items }))
         .catch(err => res.status(404).json({ msg: 'No items found' }));
 });
-app.get('/loggedIn', function(req, res) {
+app.get('/loggedIn', function (req, res) {
     res.render('logged.ejs');
 });
 
@@ -148,44 +148,41 @@ app.post('/item/auth', (req, res) => {
     var pass = req.body.prop;
     global.found;
     global.found = 0;
-    if (uname == "guest" && pass == "guest") {
-        return res.redirect('/loggedIn');
-    } else {
-        var f = 0;
-        /*f = function(err, User) {
-            User.find()
-                .then(users => {
-                    console.log(users);
-                    async.forEach(users, (element) => {
-                        if (uname == element['name'] && pass == element['pass']) {
-                            f = 1;
-                        }
-                        console.log(element['name']);
-                    });
-                })
-                .catch(err => res.status(404).json({ msg: 'No items found' }));
-        }*/
-        User.count({ name: uname, pass: pass }, function(err, count) {
-            if (count > 0) {
-                //document exists });
-                return res.redirect('/loggedIn');
-            } else {
-                var msgTop = 'Wrong Credentials';
-                var msg = '';
-                return res.render('index.ejs', { msgTop, msg });
-            }
-        });
-        /*
-        const result = User.find({ name: uname, pass: pass });
-        //console.log(result);
-        var url = '/';
-        if (result != null) {
-            url = '/loggdIn';
-            //console.log("fgsherujrul");
+
+    var f = 0;
+    /*f = function(err, User) {
+        User.find()
+            .then(users => {
+                console.log(users);
+                async.forEach(users, (element) => {
+                    if (uname == element['name'] && pass == element['pass']) {
+                        f = 1;
+                    }
+                    console.log(element['name']);
+                });
+            })
+            .catch(err => res.status(404).json({ msg: 'No items found' }));
+    }*/
+    User.count({ name: uname, pass: pass }, function (err, count) {
+        if (count > 0) {
+            //document exists });
             return res.redirect('/loggedIn');
+        } else {
+            var msgTop = 'Invalid username and/or password';
+            var msg = '';
+            return res.render('index.ejs', { msgTop, msg });
         }
-        return res.redirect('/');*/
+    });
+    /*
+    const result = User.find({ name: uname, pass: pass });
+    //console.log(result);
+    var url = '/';
+    if (result != null) {
+        url = '/loggdIn';
+        //console.log("fgsherujrul");
+        return res.redirect('/loggedIn');
     }
+    return res.redirect('/');*/
 });
 app.post('/item/addUser', (req, res) => {
     const newUser = new User({
@@ -193,11 +190,11 @@ app.post('/item/addUser', (req, res) => {
         pass: req.body.pass
     });
     var uname = req.body.name;
-    User.count({ name: uname }, function(err, count) {
+    User.count({ name: uname }, function (err, count) {
         if (count > 0) {
             //document exists });
             var msgTop = '';
-            var msg = 'Username Already Taken!!'
+            var msg = 'Username exists! Please enter another name.'
             return res.render('index', { msgTop, msg });
         } else {
             newUser.save().then(user => res.redirect('/'));
@@ -212,7 +209,7 @@ app.post('/item/Add', (req, res) => {
     path.join('public/uploads/', file.originalname)
     newItem.save().then(item => res.redirect('/loggedIn'));
 });
-app.post('/item/authAdmin', (req, res) => {
+/*app.post('/item/authAdmin', (req, res) => {
     var uname = req.body.name;
     var pass = req.body.prop;
     if (uname == 'admin' && pass == 'admin') {
@@ -220,12 +217,35 @@ app.post('/item/authAdmin', (req, res) => {
     } else {
         res.redirect('/');
     }
+});*/
+
+app.post('/descfind', (req, res) => {
+    ImageData.find({}, function (err, docs) {
+        if (err) { res.json(err); } else {
+            let description = req.body.description;
+            let result = [];
+            let i = 0;
+            docs.forEach((doc) => {
+                let obj = JSON.parse(JSON.stringify(doc));
+                let str = obj['image']['ImageDescription'];
+                let j = 0;
+                for (const char of str) {
+                    if(j==description.length) break;
+                    if (char == description.charAt(j)) j++;
+                    else j = 0;
+                }
+
+                if (j == description.length) {
+                    result.push(String(ob['path']).substr(7));
+                }
+            });
+            res.render('list', { items: result, layout: false });
+        }
+    });
 });
 
-
-
 app.post('/find', (req, res) => {
-    ImageData.find({}, function(err, docs) {
+    ImageData.find({}, function (err, docs) {
         if (err) { res.json(err); } else {
             var name1 = req.body.name1;
             var name2 = req.body.name2;

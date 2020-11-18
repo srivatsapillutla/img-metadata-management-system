@@ -9,25 +9,55 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
     
     <title>Image Metadata Management System</title>
+    <style>
+        .btn-submit {
+			background: rgba(57, 136, 255, 0.5);
+			outline: none;
+			width: 100px;
+			padding-top: 0px;
+			padding-bottom: 5px;
+			padding-left: 5px;
+			padding-right: 5px;
+			margin-top: 20px;
+			border-color: rgba(0, 0, 255, 0.2);
+			border-radius: 5%;
+			font-family: "Segoe UI", Arial, sans-serif;
+			font-size: 18px;
+			color: #242323;
+		}
+
+		.btn-submit:hover {
+			background: rgba(57, 136, 255, 0.8);
+			cursor:pointer;
+		}
+    </style>
 </head>
 
 <body style="text-align: center;">
     <br>
     <br>
+    <form method="POST" action="/descfind">
+		<label for="name">Type of the image you want in a single word</label>
+		<input type="text" name="description" style="width: 100px;">
+
+		<button class="btn-submit" type="submit">Search</button>
+	</form>
+	<p>Please note that image is searched based on "Image Description" property of image. So, The output sometimes might not have related image/no image at all for the requested query.</p>
+
     <div class="hi">
       <div class="form">
         <h4><b>Search</b></h4>
         <form method="post" action="/find">
-            <label for="name">Meta Data Major Label</label>
+            <label for="name">Key1</label>
             <input type="text" name="name1" style="width: 80px;">
             
-            <label for="name">Meta Data Minor Label(Optional)</label>
+            <label for="name">Key2</label>
             <input type="text" name="name2" style="width: 80px;">
             
             <label for="name">Value</label>
             <input type="text" name="prop" style="width: 80px;">
             
-            <input type="submit" value="Find">
+            <button class="btn-submit" type="submit">Search</button>
         </form>
       </div>
 
@@ -49,7 +79,7 @@
                   </div>
               </div>
               <br>
-              <button style="background-color:red;"type="submit" class="btn">Submit</button>
+              <button type="submit" class="btn-submit">Upload</button>
           </form>
           <br> <h6>Preview of previous upload:</h6>
           <img src="<%= typeof file != 'undefined' ? file : '' %>" class="responsive-img" style="max-height: 80px;">
